@@ -7,16 +7,16 @@ def score(game):
             result += get_value(game[i])
         if frame < 10:
             if game[i] == '/':
-                result += 10 - get_value(game[i-1])
-                result += get_value(game[i+1])
+                result += 10 - get_value(game[i-1]) + get_value(game[i+1])
             elif game[i] == 'X' or game[i] == 'x':
-                result += is_X(game[i+1], game[i+2])
+                result += strike(game[i+1], game[i+2])
         if in_first_half:
-            in_first_half = False
+            if game[i] == 'X' or game[i] == 'x':
+                in_first_half = True
+                frame += 1
+            else:
+                in_first_half = False
         else:
-            frame += 1
-            in_first_half = True
-        if game[i] == 'X' or game[i] == 'x':
             in_first_half = True
             frame += 1
     return result
@@ -35,7 +35,7 @@ def get_value(char):
         raise ValueError()
 
 
-def is_X(plus_one, plus_two):
+def strike(plus_one, plus_two):
     result = get_value(plus_one)
     if plus_two == '/':
         result += 10 - result
